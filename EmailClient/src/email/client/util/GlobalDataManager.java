@@ -26,6 +26,7 @@ public final class GlobalDataManager {
 
 	private GlobalDataManager() {
 		// 添加测试数据，方便测试
+		addData("localEmailHost", "yeah.net");
 		addData("localEmailAddress", "formytest_123@yeah.net");
 		addData("localEmailPassword", "formytest");
 

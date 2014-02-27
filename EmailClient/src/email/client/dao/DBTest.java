@@ -1,4 +1,4 @@
-package email.client.database;
+package email.client.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

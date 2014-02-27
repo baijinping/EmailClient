@@ -1,6 +1,13 @@
 package email.client.gui.receive;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.UUID;
+
 import javax.mail.Message;
+
+import email.client.dao.DBConnection;
 
 /**
  * 用来保存SimpleEmailReceiver.handlerReceive()返回的邮件数据
@@ -30,9 +37,30 @@ public class ReceivedEmailStore {
 	 * 将这些邮件数据存入到数据库中
 	 */
 	public void saveIntoDB() {
+		Connection conn = null;
+		PreparedStatement ps = null;
 		try {
-
+			conn = DBConnection.getConnection();
+			ps = conn.prepareStatement("");
+			
+			for (Message message : messages) {
+				System.out.println(message.hashCode());
+			}
+			
 		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
 		}
 	}
 
@@ -45,4 +73,5 @@ public class ReceivedEmailStore {
 		return new String[] { "1", "2", "33333", "444444", "33333", "444444",
 				"33333", "444444" };
 	}
+	
 }
