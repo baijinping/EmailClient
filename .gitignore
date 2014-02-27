@@ -5,3 +5,4 @@ EmailClient/bin/
 EmailClient/.setting/
 EmailClient/.project
 EmailClient/.classpath
+*.prefs
