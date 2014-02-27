@@ -112,6 +112,7 @@ public class SimpleEmailReceiver {
 		 * parseMessage(msg); // 解析邮件 // 第二个参数如果设置为true，则将修改反馈给服务器。false则不反馈给服务器
 		 * msg.setFlag(Flag.SEEN, true); // 设置已读标志 } }
 		 */
+		
 		return receivedEmailStore;
 	}
 
@@ -188,7 +189,7 @@ public class SimpleEmailReceiver {
 	 *            邮件内容
 	 * @return 解码后的邮件主题
 	 */
-	public String getSubject(MimeMessage msg)
+	public static String getSubject(MimeMessage msg)
 			throws UnsupportedEncodingException, MessagingException {
 		return MimeUtility.decodeText(msg.getSubject());
 	}
@@ -202,7 +203,7 @@ public class SimpleEmailReceiver {
 	 * @throws MessagingException
 	 * @throws UnsupportedEncodingException
 	 */
-	public String getFrom(MimeMessage msg) throws MessagingException,
+	public static String getFrom(MimeMessage msg) throws MessagingException,
 			UnsupportedEncodingException {
 		String from = "";
 		Address[] froms = msg.getFrom();
@@ -240,7 +241,7 @@ public class SimpleEmailReceiver {
 	 * @return 收件人1 <邮件地址1>, 收件人2 <邮件地址2>, ...
 	 * @throws MessagingException
 	 */
-	public String getReceiveAddress(MimeMessage msg, Message.RecipientType type)
+	public static String getReceiveAddress(MimeMessage msg, Message.RecipientType type)
 			throws MessagingException {
 		StringBuffer receiveAddress = new StringBuffer();
 		Address[] addresss = null;
@@ -271,7 +272,7 @@ public class SimpleEmailReceiver {
 	 * @return yyyy年mm月dd日 星期X HH:mm
 	 * @throws MessagingException
 	 */
-	public String getSentDate(MimeMessage msg, String pattern)
+	public static String getSentDate(MimeMessage msg, String pattern)
 			throws MessagingException {
 		Date receivedDate = msg.getSentDate();
 		if (receivedDate == null)
@@ -292,7 +293,7 @@ public class SimpleEmailReceiver {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	public boolean isContainAttachment(Part part) throws MessagingException,
+	public static boolean isContainAttachment(Part part) throws MessagingException,
 			IOException {
 		boolean flag = false;
 		if (part.isMimeType("multipart/*")) {
@@ -335,7 +336,7 @@ public class SimpleEmailReceiver {
 	 * @return 如果邮件已读返回true,否则返回false
 	 * @throws MessagingException
 	 */
-	public boolean isSeen(MimeMessage msg) throws MessagingException {
+	public static boolean isSeen(MimeMessage msg) throws MessagingException {
 		return msg.getFlags().contains(Flags.Flag.SEEN);
 	}
 
@@ -347,7 +348,7 @@ public class SimpleEmailReceiver {
 	 * @return 需要回执返回true,否则返回false
 	 * @throws MessagingException
 	 */
-	public boolean isReplySign(MimeMessage msg) throws MessagingException {
+	public static boolean isReplySign(MimeMessage msg) throws MessagingException {
 		boolean replySign = false;
 		String[] headers = msg.getHeader("Disposition-Notification-To");
 		if (headers != null)
@@ -363,7 +364,7 @@ public class SimpleEmailReceiver {
 	 * @return 1(High):紧急 3:普通(Normal) 5:低(Low)
 	 * @throws MessagingException
 	 */
-	public String getPriority(MimeMessage msg) throws MessagingException {
+	public static String getPriority(MimeMessage msg) throws MessagingException {
 		String priority = "普通";
 		String[] headers = msg.getHeader("X-Priority");
 		if (headers != null) {
@@ -390,7 +391,7 @@ public class SimpleEmailReceiver {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	public void getMailTextContent(Part part, StringBuffer content)
+	public static void getMailTextContent(Part part, StringBuffer content)
 			throws MessagingException, IOException {
 		// 如果是文本类型的附件，通过getContent方法可以取到文本内容，但这不是我们需要的结果，所以在这里要做判断
 		boolean isContainTextAttach = part.getContentType().indexOf("name") > 0;
@@ -420,7 +421,7 @@ public class SimpleEmailReceiver {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void saveAttachment(Part part, String destDir)
+	public static void saveAttachment(Part part, String destDir)
 			throws UnsupportedEncodingException, MessagingException,
 			FileNotFoundException, IOException {
 		if (part.isMimeType("multipart/*")) {
@@ -465,7 +466,7 @@ public class SimpleEmailReceiver {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private void saveFile(InputStream is, String destDir, String fileName)
+	private static void saveFile(InputStream is, String destDir, String fileName)
 			throws FileNotFoundException, IOException {
 		BufferedInputStream bis = new BufferedInputStream(is);
 		File savePath = new File(destDir);
@@ -491,7 +492,7 @@ public class SimpleEmailReceiver {
 	 * @return 解码后的文本
 	 * @throws UnsupportedEncodingException
 	 */
-	public String decodeText(String encodeText)
+	public static String decodeText(String encodeText)
 			throws UnsupportedEncodingException {
 		if (encodeText == null || "".equals(encodeText)) {
 			return "";

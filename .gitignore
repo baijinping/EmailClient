@@ -1,8 +1,3 @@
 # 忽略所有*.clsss文件
 *.class
 EmailClient/bin/
-# 忽略eclipse本地设置文件
-EmailClient/.setting/
-EmailClient/.project
-EmailClient/.classpath
-*.prefs
