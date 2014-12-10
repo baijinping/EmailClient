@@ -8,6 +8,13 @@ import java.sql.Statement;
 
 import email.client.util.PathManager;
 
+/**
+ * 测试类，用来测试数据库连接是否正常
+ * @author baikkp
+ * 
+ * 2014-4-5 下午8:44:49
+ *
+ */
 public class DBTest {
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException {

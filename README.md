@@ -1,7 +1,12 @@
-EmailClient
-===========
-
+##暖冬EmailClient
 Java实现的电子邮件桌面客户端
 
-===========
-于2014/2/28迁移到git.OSChina.net上。
+---
+####依赖库Requirement
+* Java1.7 or newer
+* Java Mail
+* SQLiteJDBC
+
+---
+####开发工具DevTool
+Eclipse

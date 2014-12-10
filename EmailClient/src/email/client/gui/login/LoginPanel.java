@@ -1,12 +1,11 @@
 package email.client.gui.login;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,13 +15,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.WindowConstants;
 
+import email.client.dao.TAccountDao;
+import email.client.dao.po.TAccount;
 import email.client.gui.PanelConst;
+import email.client.gui.main.MainUI;
+import email.client.handler.CacheDataLoader;
 import email.client.handler.login.EmailAccountCheck;
+import email.client.util.GlobalDataManager;
 
 public class LoginPanel extends JPanel {
 
@@ -46,11 +46,14 @@ public class LoginPanel extends JPanel {
 	// 逻辑处理类
 	private EmailAccountCheck accountCheck = new EmailAccountCheck();
 
-	public LoginPanel() {
+	private JFrame parent;
+
+	public LoginPanel(JFrame parent) {
+		super();
+		this.parent = parent;
 
 		initComponment();
 		initComponmentListener();
-		initWindowListener();
 
 		setVisible(true);
 	}
@@ -58,8 +61,8 @@ public class LoginPanel extends JPanel {
 	private void initComponment() {
 		lblEmailAddress = new JLabel("E-Mail地址 : ");
 
-		cbxEmailHost = new JComboBox<String>(new String[] { "126.com",
-				"163.com", "qq.com", "yeah.net" });
+		cbxEmailHost = new JComboBox<String>(new String[] { "@yeah.net",
+				"@126.com", "@163.com", "@qq.com" });
 
 		lblEmailPassword = new JLabel("密码 : ");
 
@@ -121,15 +124,30 @@ public class LoginPanel extends JPanel {
 				}
 				String host = cbxEmailHost.getItemAt(cbxEmailHost
 						.getSelectedIndex());
+				host = host.substring(1);
+				String emailAddress = txtEmailAddress.getText() + "@" + host;
+				String password = txtEmailPassword.getText();
 				boolean result = EmailAccountCheck.checkEmailAccount(host,
-						"smtp", txtEmailAddress.getText() + "@" + host,
-						txtEmailPassword.getText());
+						"smtp", emailAddress, password);
 				if (result) {
-					int select = JOptionPane.showConfirmDialog(null,
-							"成功创建账号，马上进入？", "", JOptionPane.OK_CANCEL_OPTION);
-					if (select == JOptionPane.OK_OPTION) {
-						JOptionPane.showMessageDialog(null, "进入成功！");
-					}
+					// 添加新账户到数据库
+					TAccount tAccount = new TAccount();
+					tAccount.setEmailAddress(emailAddress);
+					TAccountDao.addNewAccount(tAccount);
+					System.out.println("添加账户" + emailAddress + " 到数据库,id = "
+							+ tAccount.getId());
+					// 添加账户数据到内存
+					System.out.println("host = " + host);
+					System.out.println("emailAddress = " + emailAddress);
+					System.out.println("password = " + password);
+					GlobalDataManager.addData("localEmailHost", host);
+					GlobalDataManager
+							.addData("localEmailAddress", emailAddress);
+					GlobalDataManager.addData("localEmailPassword", password);
+					GlobalDataManager.addData("localAccountId",
+							tAccount.getId());
+
+					enterMainUI();
 				} else {
 					if (host.contains("qq.com")) {
 						setWarningMsg(PanelConst.LOGIN_QQMAIN_FAIL_MSG);
@@ -141,13 +159,28 @@ public class LoginPanel extends JPanel {
 		});
 	}
 
-	private void initWindowListener() {
-
-	}
-
 	public void setWarningMsg(String msg) {
 		txtErrorMsg.setFont(PanelConst.LOGIN_WARN_FONT);
 		txtErrorMsg.setText(msg);
+	}
+
+	/**
+	 * 进入主界面
+	 */
+	private void enterMainUI() {
+		parent.setVisible(false);
+
+		try {
+			CacheDataLoader.loadCacheData();
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,
+					"十分抱歉！加载数据时发生错误：" + e.getMessage(), "启动失败",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+		}
+		new MainUI("暖冬 EmailClient");
+		parent.dispose();
 	}
 
 }

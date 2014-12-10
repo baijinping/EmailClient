@@ -1,15 +1,23 @@
-package email.client.dao.po;
+﻿package email.client.dao.po;
 
+/**
+ * 用来保存邮件数据，作为emailJList的元素值
+ * @author baikkp
+ *
+ * 2014-2-28 下午3:54:55
+ */
 public class TEmail {
 
-    private int id;
-    private int accountId;
-    private int status = 0;
-    private int type;
+    private Integer id;
+    private Integer accountId;
+    private Integer status = 0;
+    private Integer type;
     private String uuid;
     private String subject;
     private String content;
     private String sendDate;
+    private String fromEmail;
+    private String fromName;
     
     public TEmail() {
     }
@@ -22,9 +30,11 @@ public class TEmail {
      * @param type
      * @param subject
      * @param content
-     * @param sendDate 字符串格式 = "yyyy-MM-dd HH:mm:ss" 
+     * @param sendDate 字符串格式 = "yyyy-MM-dd HH:mm:ss"
+     * @param status 邮件状态，如是否已读等
+     * @param fromEmail 发件人邮箱
      */
-    public TEmail(int id, int accountId, int status, int type, String subject, String content, String sendDate, String uuid) {
+    public TEmail(Integer id, Integer accountId, Integer status, Integer type, String subject, String content, String sendDate, String uuid, String fromEmail) {
         this.id = id;
         this.accountId = accountId;
         this.uuid = uuid;
@@ -32,29 +42,31 @@ public class TEmail {
         this.subject = subject;
         this.content = content;
         this.sendDate = sendDate;
+        this.status = status;
+        this.fromEmail = fromEmail;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getAccountId() {
+    public Integer getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
 	return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
 	this.status = status;
     }
 
@@ -66,11 +78,11 @@ public class TEmail {
         this.uuid = uuid;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -98,4 +110,27 @@ public class TEmail {
         this.sendDate = sendDate;
     }
     
+    public String getFromEmail() {
+	return fromEmail;
+    }
+
+    public void setFromEmail(String fromEmail) {
+	this.fromEmail = fromEmail;
+    }
+    
+    public String getFromName() {
+		return fromName;
+	}
+
+	public void setFromName(String fromName) {
+		this.fromName = fromName;
+	}
+
+	/**
+     * 返回subject
+     */
+    public String toString() {
+    	return subject;
+    }
+
 }

@@ -1,4 +1,4 @@
-package email.client.gui.send;
+package email.client.handler.send;
 
 import java.util.Date;
 import java.util.Properties;

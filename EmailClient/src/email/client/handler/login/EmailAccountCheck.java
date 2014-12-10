@@ -59,17 +59,4 @@ public class EmailAccountCheck {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.yeah.net");
-		props.put("mail.smtp.auth", "true");
-		Session session = Session.getDefaultInstance(props);
-		Transport transport = session.getTransport("smtp");
-		// 测试账号
-		transport.connect(GlobalDataManager.getData("localEmailAddress")
-				.toString(), GlobalDataManager.getData("localEmailPassword")
-				.toString());
-		System.out.println(transport.getURLName());
-		transport.close();
-	}
 }

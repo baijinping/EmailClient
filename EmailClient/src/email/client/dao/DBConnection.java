@@ -16,20 +16,41 @@ import email.client.util.PathManager;
  */
 public class DBConnection {
 
+	static {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	private static Connection conn = null;
+	
 	/**
 	 * 取得数据库连接
 	 * 
 	 * @return
 	 */
 	public static Connection getConnection() {
-		Connection conn = null;
+		
 		try {
-			Class.forName("org.sqlite.JDBC");
+		    if(conn == null || conn.isClosed()) {
 			conn = DriverManager.getConnection("jdbc:sqlite:/"
 					+ PathManager.getResourcePath() + "maildb.db");
-		} catch (ClassNotFoundException | SQLException e) {
+		    }
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return conn;
+	}
+	
+	/**
+	 * 关闭数据库连接
+	 */
+	public static void closeConnection(Connection conn) {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

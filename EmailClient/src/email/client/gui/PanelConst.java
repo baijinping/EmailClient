@@ -1,8 +1,14 @@
 package email.client.gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import email.client.util.PathManager;
 
 public interface PanelConst {
 	// 登录界面长宽

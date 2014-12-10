@@ -1,6 +1,8 @@
-package email.client.gui.send;
+package email.client.handler.send;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -18,12 +20,19 @@ import email.client.handler.login.MyAuthenticator;
  */
 public class SimpleEmailSender {
 
-	public static boolean sendMain(EmailToSendInfo mailToSend) {
+	public static boolean sendMail(final EmailToSendInfo mailToSend) {
 		// 根据邮件会话属性和验证信息构造一个发送邮件的Session
-		Session session = Session.getDefaultInstance(
+		/*这一种创建Session的方式，会导致Access to default session denied错误
+		 * Session session = Session.getDefaultInstance(
 				mailToSend.getProperties(),
 				new MyAuthenticator(mailToSend.getSenderAddress(), mailToSend
-						.getSenderPassword()));
+						.getSenderPassword()));*/
+		Session session = Session.getInstance(mailToSend.getProperties(), new Authenticator() {
+		    @Override
+		    protected PasswordAuthentication getPasswordAuthentication() {
+		        return new PasswordAuthentication(mailToSend.getSenderAddress(), mailToSend.getSenderPassword());
+		    }
+		});
 		try {
 			// 根据Session创建一个邮件消息
 			Message mailMessage = new MimeMessage(session);
